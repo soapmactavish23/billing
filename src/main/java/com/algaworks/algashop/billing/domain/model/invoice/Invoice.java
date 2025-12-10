@@ -2,14 +2,12 @@ package com.algaworks.algashop.billing.domain.model.invoice;
 
 import com.algaworks.algashop.billing.domain.model.DomainException;
 import com.algaworks.algashop.billing.domain.model.IdGenerator;
+import io.micrometer.common.util.StringUtils;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -42,6 +40,18 @@ public class Invoice {
     private String cancelReason;
 
     public static Invoice issue(String orderId, UUID customerId, Payer payer, Set<LineItem> items) {
+
+        Objects.requireNonNull(customerId);
+        Objects.requireNonNull(payer);
+        Objects.requireNonNull(items);
+
+        if(StringUtils.isBlank(orderId)) {
+            throw new IllegalArgumentException();
+        }
+
+        if(items.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
 
         BigDecimal totalAmount = items.stream().map(LineItem::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
 
