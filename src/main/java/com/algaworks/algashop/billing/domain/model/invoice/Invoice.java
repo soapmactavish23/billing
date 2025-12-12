@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-@Getter
 @Setter(AccessLevel.PRIVATE)
+@Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,7 +18,6 @@ public class Invoice {
 
     @EqualsAndHashCode.Include
     private UUID id;
-
     private String orderId;
     private UUID customerId;
 
@@ -39,21 +38,24 @@ public class Invoice {
 
     private String cancelReason;
 
-    public static Invoice issue(String orderId, UUID customerId, Payer payer, Set<LineItem> items) {
-
+    public static Invoice issue(String orderId,
+                                UUID customerId,
+                                Payer payer,
+                                Set<LineItem> items) {
         Objects.requireNonNull(customerId);
         Objects.requireNonNull(payer);
         Objects.requireNonNull(items);
 
-        if(StringUtils.isBlank(orderId)) {
+        if (StringUtils.isBlank(orderId)) {
             throw new IllegalArgumentException();
         }
 
-        if(items.isEmpty()) {
+        if (items.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
-        BigDecimal totalAmount = items.stream().map(LineItem::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalAmount = items.stream().map(LineItem::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return new Invoice(
                 IdGenerator.generateTimeBasedUUID(),
@@ -89,26 +91,25 @@ public class Invoice {
     }
 
     public void markAsPaid() {
-        if(!isUnpaid()) {
-            throw new DomainException(String.format("Invoice %s with status %s cannot be market as paid",
+        if (!isUnpaid()) {
+            throw new DomainException(String.format("Invoice %s with status %s cannot be marked as paid",
                     this.getId(), this.getStatus().toString().toLowerCase()));
         }
         setPaidAt(OffsetDateTime.now());
         setStatus(InvoiceStatus.PAID);
     }
 
-    public void cancel() {
-        if(isCanceled()) {
+    public void cancel(String cancelReason) {
+        if (isCanceled()) {
             throw new DomainException(String.format("Invoice %s is already canceled", this.getId()));
         }
-
         setCancelReason(cancelReason);
         setCanceledAt(OffsetDateTime.now());
         setStatus(InvoiceStatus.CANCELED);
     }
 
     public void assignPaymentGatewayCode(String code) {
-        if(!isUnpaid()) {
+        if (!isUnpaid()) {
             throw new DomainException(String.format("Invoice %s with status %s cannot be edited",
                     this.getId(), this.getStatus().toString().toLowerCase()));
         }
@@ -116,7 +117,7 @@ public class Invoice {
     }
 
     public void changePaymentSettings(PaymentMethod method, UUID creditCardId) {
-        if(!isUnpaid()) {
+        if (!isUnpaid()) {
             throw new DomainException(String.format("Invoice %s with status %s cannot be edited",
                     this.getId(), this.getStatus().toString().toLowerCase()));
         }
