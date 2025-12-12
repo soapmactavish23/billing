@@ -1,13 +1,12 @@
 package com.algaworks.algashop.billing.domain.model.invoice;
 
+import com.algaworks.algashop.billing.domain.model.FieldValidations;
 import lombok.*;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class Payer {
 
     private String fullName;
@@ -16,4 +15,17 @@ public class Payer {
     private String email;
     private Address address;
 
+
+    @Builder
+    public Payer(String fullName, String document, String phone, String email, Address address) {
+        FieldValidations.requiresNonBlank(fullName);
+        FieldValidations.requiresNonBlank(document);
+        FieldValidations.requiresNonBlank(phone);
+        FieldValidations.requiresValidEmail(email);
+        this.fullName = fullName;
+        this.document = document;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+    }
 }
