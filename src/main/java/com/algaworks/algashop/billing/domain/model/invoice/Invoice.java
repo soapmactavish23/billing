@@ -1,5 +1,6 @@
 package com.algaworks.algashop.billing.domain.model.invoice;
 
+import com.algaworks.algashop.billing.domain.model.AbstractAuditableEntity;
 import com.algaworks.algashop.billing.domain.model.DomainException;
 import com.algaworks.algashop.billing.domain.model.IdGenerator;
 import io.micrometer.common.util.StringUtils;
@@ -13,10 +14,10 @@ import java.util.*;
 @Entity
 @Setter(AccessLevel.PRIVATE)
 @Getter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class Invoice {
+public class Invoice extends AbstractAuditableEntity {
 
     @Id
     @EqualsAndHashCode.Include
