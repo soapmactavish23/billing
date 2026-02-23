@@ -28,7 +28,7 @@ public class AlgaShopPaymentProperties {
 
     @Data
     @Validated
-    private static class FastpayProperties {
+    public static class FastpayProperties {
 
         @NotBlank
         private String hostname;
