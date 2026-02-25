@@ -12,7 +12,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "algashop.integrations.payment.provider", havingValue = "FASTPAY")
-public class CredtiCardProviderServiceFastpayImpl implements CreditCardProviderService {
+public class CreditCardProviderServiceFastpayImpl implements CreditCardProviderService {
 
     private final FastpayCreditCardAPIClient fastpayCreditCardAPIClient;
 
