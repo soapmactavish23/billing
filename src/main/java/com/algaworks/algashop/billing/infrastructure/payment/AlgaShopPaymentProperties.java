@@ -19,7 +19,7 @@ public class AlgaShopPaymentProperties {
 
     @NotNull
     @Valid
-    private FastpayProperties fastPay;
+    private FastpayProperties fastpay;
 
     private enum AlgaShopPaymentProvider {
         FAKE,

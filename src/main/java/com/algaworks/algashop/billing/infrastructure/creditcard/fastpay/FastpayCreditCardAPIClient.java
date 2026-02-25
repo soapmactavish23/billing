@@ -1,8 +1,8 @@
 package com.algaworks.algashop.billing.infrastructure.creditcard.fastpay;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.service.annotation.DeleteExchange;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 import org.springframework.web.service.annotation.PostExchange;
@@ -15,6 +15,6 @@ public interface FastpayCreditCardAPIClient {
     @GetExchange("/{creditCardId}")
     FastpayCreditCardResponse findById(@PathVariable String creditCardId);
 
-    @DeleteMapping("/{creditCardId}")
+    @DeleteExchange("/{creditCardId}")
     void delete(@PathVariable String creditCardId);
 }

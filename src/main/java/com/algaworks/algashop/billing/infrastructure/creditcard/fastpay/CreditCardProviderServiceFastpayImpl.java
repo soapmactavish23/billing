@@ -5,13 +5,14 @@ import com.algaworks.algashop.billing.domain.model.creditcard.LimitedCreditCard;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @ConditionalOnProperty(name = "algashop.integrations.payment.provider", havingValue = "FASTPAY")
+@RequiredArgsConstructor
 public class CreditCardProviderServiceFastpayImpl implements CreditCardProviderService {
 
     private final FastpayCreditCardAPIClient fastpayCreditCardAPIClient;
@@ -24,14 +25,18 @@ public class CreditCardProviderServiceFastpayImpl implements CreditCardProviderS
                 .build();
 
         FastpayCreditCardResponse response = fastpayCreditCardAPIClient.create(input);
-
-        return toLimitedCredtCard(response);
+        return toLimitedCreditCard(response);
     }
 
     @Override
     public Optional<LimitedCreditCard> findById(String gatewayCode) {
-        FastpayCreditCardResponse response = fastpayCreditCardAPIClient.findById(gatewayCode);
-        return Optional.of(toLimitedCredtCard(response));
+        FastpayCreditCardResponse response;
+        try {
+            response = fastpayCreditCardAPIClient.findById(gatewayCode);
+        } catch (HttpClientErrorException.NotFound e) {
+            return Optional.empty();
+        }
+        return Optional.of(toLimitedCreditCard(response));
     }
 
     @Override
@@ -39,7 +44,7 @@ public class CreditCardProviderServiceFastpayImpl implements CreditCardProviderS
         fastpayCreditCardAPIClient.delete(gatewayCode);
     }
 
-    private static LimitedCreditCard toLimitedCredtCard(FastpayCreditCardResponse response) {
+    private LimitedCreditCard toLimitedCreditCard(FastpayCreditCardResponse response) {
         return LimitedCreditCard.builder()
                 .brand(response.getBrand())
                 .expYear(response.getExpYear())
