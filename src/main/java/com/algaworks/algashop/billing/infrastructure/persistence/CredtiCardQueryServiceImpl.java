@@ -1,7 +1,7 @@
 package com.algaworks.algashop.billing.infrastructure.persistence;
 
 import com.algaworks.algashop.billing.application.creditcard.query.CreditCardOutput;
-import com.algaworks.algashop.billing.application.creditcard.query.CredtiCardQueryService;
+import com.algaworks.algashop.billing.application.creditcard.query.CreditCardQueryService;
 import com.algaworks.algashop.billing.application.utility.Mapper;
 import com.algaworks.algashop.billing.domain.model.creditcard.CreditCardNotFoundException;
 import com.algaworks.algashop.billing.domain.model.creditcard.CreditCardRepository;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CredtiCardQueryServiceImpl implements CredtiCardQueryService {
+public class CredtiCardQueryServiceImpl implements CreditCardQueryService {
 
     private final CreditCardRepository creditCardRepository;
     private final Mapper mapper;
