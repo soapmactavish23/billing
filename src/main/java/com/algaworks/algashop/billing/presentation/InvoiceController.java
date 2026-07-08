@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@Slf4j
+import static com.algaworks.algashop.billing.infrastructure.security.SecurityAnnotations.*;
+
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/orders/{orderId}/invoice")
+@RequiredArgsConstructor
+@Slf4j
 public class InvoiceController {
 
     private final InvoiceQueryService invoiceQueryService;
@@ -23,20 +25,20 @@ public class InvoiceController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @CanWriteInvoices
     public InvoiceOutput generate(@PathVariable String orderId, @Valid @RequestBody GenerateInvoiceInput input) {
         input.setOrderId(orderId);
         UUID invoiceId = invoiceManagementApplicationService.generate(input);
-
         try {
             invoiceManagementApplicationService.processPayment(invoiceId);
         } catch (Exception e) {
             log.error(String.format("Error when processing payment for invoice %s", invoiceId), e);
         }
-
         return invoiceQueryService.findByOrderId(orderId);
     }
 
     @GetMapping
+    @CanReadInvoices
     public InvoiceOutput findByOrder(@PathVariable String orderId) {
         return invoiceQueryService.findByOrderId(orderId);
     }
