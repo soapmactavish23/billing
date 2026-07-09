@@ -22,13 +22,13 @@ class CreditCardProviderServiceFastpayImplIT extends AbstractFastpayIT {
     }
 
     @Test
-    void shouldRegisterCreditCard() {
+    public void shouldRegisterCreditCard() {
         LimitedCreditCard limitedCreditCard = registerCard();
         Assertions.assertThat(limitedCreditCard.getGatewayCode()).isNotBlank();
     }
 
     @Test
-    void shouldFindRegisteredCreditCard() {
+    public void shouldFindRegisteredCreditCard() {
         LimitedCreditCard limitedCreditCard = registerCard();
 
         LimitedCreditCard limitedCreditCardFound = creditCardProvider.findById(limitedCreditCard.getGatewayCode()).orElseThrow();
@@ -37,7 +37,7 @@ class CreditCardProviderServiceFastpayImplIT extends AbstractFastpayIT {
     }
 
     @Test
-    void shouldDeleteRegisteredCreditCard() {
+    public void shouldDeleteRegisteredCreditCard() {
         LimitedCreditCard limitedCreditCard = registerCard();
         creditCardProvider.delete(limitedCreditCard.getGatewayCode());
     }

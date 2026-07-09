@@ -11,33 +11,19 @@ public class CreditCardTestDataBuilder {
     private Integer expYear = 2025;
     private String gatewayCreditCardCode = "12345";
 
-    private CreditCardTestDataBuilder() {}
+    private CreditCardTestDataBuilder() {
+    }
 
     public static CreditCardTestDataBuilder aCreditCard() {
         return new CreditCardTestDataBuilder();
     }
 
-    public CreditCard builder() {
+    public CreditCard build() {
         return CreditCard.brandNew(customerId, lastNumbers, brand, expMonth, expYear, gatewayCreditCardCode);
     }
 
-    public CreditCardTestDataBuilder gatewayCreditCardCode(String gatewayCreditCardCode) {
-        this.gatewayCreditCardCode = gatewayCreditCardCode;
-        return this;
-    }
-
-    public CreditCardTestDataBuilder expYear(Integer expYear) {
-        this.expYear = expYear;
-        return this;
-    }
-
-    public CreditCardTestDataBuilder expMonth(Integer expMonth) {
-        this.expMonth = expMonth;
-        return this;
-    }
-
-    public CreditCardTestDataBuilder brand(String brand) {
-        this.brand = brand;
+    public CreditCardTestDataBuilder customerId(UUID customerId) {
+        this.customerId = customerId;
         return this;
     }
 
@@ -46,8 +32,23 @@ public class CreditCardTestDataBuilder {
         return this;
     }
 
-    public CreditCardTestDataBuilder customerId(UUID customerId) {
-        this.customerId = customerId;
+    public CreditCardTestDataBuilder brand(String brand) {
+        this.brand = brand;
+        return this;
+    }
+
+    public CreditCardTestDataBuilder expMonth(Integer expMonth) {
+        this.expMonth = expMonth;
+        return this;
+    }
+
+    public CreditCardTestDataBuilder expYear(Integer expYear) {
+        this.expYear = expYear;
+        return this;
+    }
+
+    public CreditCardTestDataBuilder gatewayCreditCardCode(String gatewayCreditCardCode) {
+        this.gatewayCreditCardCode = gatewayCreditCardCode;
         return this;
     }
 }

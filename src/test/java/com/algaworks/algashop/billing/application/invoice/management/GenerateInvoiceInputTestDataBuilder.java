@@ -6,11 +6,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-public class GenerateInvoiceInputTestDataBuilder{
-
+public class GenerateInvoiceInputTestDataBuilder {
     public static GenerateInvoiceInput.GenerateInvoiceInputBuilder anInput() {
         return GenerateInvoiceInput.builder()
-                .orderId("ABC100")
+                .orderId("123ABC")
                 .customerId(UUID.randomUUID())
                 .paymentSettings(PaymentSettingsInput.builder()
                         .method(PaymentMethod.CREDIT_CARD)

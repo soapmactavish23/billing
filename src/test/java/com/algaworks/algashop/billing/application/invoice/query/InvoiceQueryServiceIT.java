@@ -1,5 +1,6 @@
 package com.algaworks.algashop.billing.application.invoice.query;
 
+import com.algaworks.algashop.billing.application.invoice.AbstractApplicationIT;
 import com.algaworks.algashop.billing.domain.model.invoice.Invoice;
 import com.algaworks.algashop.billing.domain.model.invoice.InvoiceRepository;
 import com.algaworks.algashop.billing.domain.model.invoice.InvoiceTestDataBuilder;
@@ -7,14 +8,8 @@ import com.algaworks.algashop.billing.domain.model.invoice.PaymentMethod;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@SpringBootTest
-@Transactional
-class InvoiceQueryServiceIT {
+class InvoiceQueryServiceIT extends AbstractApplicationIT {
 
     @Autowired
     private InvoiceQueryService invoiceQueryService;
@@ -23,7 +18,7 @@ class InvoiceQueryServiceIT {
     private InvoiceRepository invoiceRepository;
 
     @Test
-    void shouldFindByOrderId() {
+    public void shouldFindByOrderId() {
         Invoice invoice = InvoiceTestDataBuilder.anInvoice().build();
         invoice.changePaymentSettings(PaymentMethod.GATEWAY_BALANCE, null);
         invoiceRepository.saveAndFlush(invoice);

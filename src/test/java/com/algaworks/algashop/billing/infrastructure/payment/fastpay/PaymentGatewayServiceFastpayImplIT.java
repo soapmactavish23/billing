@@ -8,7 +8,6 @@ import com.algaworks.algashop.billing.domain.model.invoice.PaymentMethod;
 import com.algaworks.algashop.billing.domain.model.invoice.payment.Payment;
 import com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentRequest;
 import com.algaworks.algashop.billing.infrastructure.AbstractFastpayIT;
-import com.algaworks.algashop.billing.infrastructure.creditcard.fastpay.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,12 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Transactional
 @SpringBootTest
+@Transactional
 class PaymentGatewayServiceFastpayImplIT extends AbstractFastpayIT {
 
     @Autowired
-    private PaymentGatewayServiceFastpayImpl paymentGatewayFastpay;
+    private PaymentGatewayServiceFastpayImpl paymentGatewayServiceFastpay;
 
     @Autowired
     private CreditCardRepository creditCardRepository;
@@ -52,6 +51,7 @@ class PaymentGatewayServiceFastpayImplIT extends AbstractFastpayIT {
                 limitedCreditCard.getExpYear(),
                 limitedCreditCard.getGatewayCode()
         );
+
         creditCardRepository.save(creditCard);
 
         UUID invoiceId = UUID.randomUUID();
@@ -64,7 +64,7 @@ class PaymentGatewayServiceFastpayImplIT extends AbstractFastpayIT {
                 .payer(InvoiceTestDataBuilder.aPayer())
                 .build();
 
-        Payment payment = paymentGatewayFastpay.capture(request);
+        Payment payment = paymentGatewayServiceFastpay.capture(request);
 
         Assertions.assertThat(payment.getInvoiceId()).isEqualTo(invoiceId);
         System.out.println(payment.getGatewayCode());

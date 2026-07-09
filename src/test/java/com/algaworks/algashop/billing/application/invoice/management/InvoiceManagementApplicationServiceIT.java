@@ -1,5 +1,6 @@
 package com.algaworks.algashop.billing.application.invoice.management;
 
+import com.algaworks.algashop.billing.application.invoice.AbstractApplicationIT;
 import com.algaworks.algashop.billing.domain.model.creditcard.CreditCard;
 import com.algaworks.algashop.billing.domain.model.creditcard.CreditCardRepository;
 import com.algaworks.algashop.billing.domain.model.creditcard.CreditCardTestDataBuilder;
@@ -13,16 +14,14 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-@SpringBootTest
-@Transactional
-class InvoiceManagementApplicationServiceIT {
+import static org.mockito.ArgumentMatchers.any;
+
+class InvoiceManagementApplicationServiceIT extends AbstractApplicationIT {
 
     @Autowired
     private InvoiceManagementApplicationService applicationService;
@@ -43,11 +42,12 @@ class InvoiceManagementApplicationServiceIT {
     private InvoiceEventListener invoiceEventListener;
 
     @Test
-    void shouldGenerateInvoice() {
-        CreditCard creditCard = CreditCardTestDataBuilder.aCreditCard().builder();
+    public void shouldGenerateInvoiceWithCreditCardAsPayment() {
+        UUID customerId = UUID.randomUUID();
+        CreditCard creditCard = CreditCardTestDataBuilder.aCreditCard().customerId(customerId).build();
         creditCardRepository.saveAndFlush(creditCard);
 
-        GenerateInvoiceInput input = GenerateInvoiceInputTestDataBuilder.anInput().build();
+        GenerateInvoiceInput input = GenerateInvoiceInputTestDataBuilder.anInput().customerId(customerId).build();
 
         input.setPaymentSettings(
                 PaymentSettingsInput.builder()
@@ -63,12 +63,18 @@ class InvoiceManagementApplicationServiceIT {
         Assertions.assertThat(invoice.getStatus()).isEqualTo(InvoiceStatus.UNPAID);
         Assertions.assertThat(invoice.getOrderId()).isEqualTo(input.getOrderId());
 
-        Mockito.verify(invoicingService).issue(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+        Assertions.assertThat(invoice.getVersion()).isEqualTo(0L);
+        Assertions.assertThat(invoice.getCreatedAt()).isNotNull();
+        Assertions.assertThat(invoice.getCreatedByUserId()).isNotNull();
 
+        Mockito.verify(invoicingService).issue(any(), any(), any(), any());
+
+        Mockito.verify(invoiceEventListener).listen(Mockito.any(InvoiceIssuedEvent.class));
     }
 
     @Test
-    void shouldGenerateInvoiceWithGatewayBalanceAsPayment() {
+    public void shouldGenerateInvoiceWithGatewayBalanceAsPayment() {
+        UUID customerId = UUID.randomUUID();
         GenerateInvoiceInput input = GenerateInvoiceInputTestDataBuilder.anInput().build();
 
         input.setPaymentSettings(
@@ -84,18 +90,11 @@ class InvoiceManagementApplicationServiceIT {
         Assertions.assertThat(invoice.getStatus()).isEqualTo(InvoiceStatus.UNPAID);
         Assertions.assertThat(invoice.getOrderId()).isEqualTo(input.getOrderId());
 
-        Assertions.assertThat(invoice.getVersion()).isEqualTo(0L);
-        Assertions.assertThat(invoice.getCreatedAt()).isNotNull();
-        Assertions.assertThat(invoice.getCreatedByUserId()).isNotNull();
-
-        Mockito.verify(invoicingService).issue(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
-
-        Mockito.verify(invoiceEventListener).listen(Mockito.any(InvoiceIssuedEvent.class));
-
+        Mockito.verify(invoicingService).issue(any(), any(), any(), any());
     }
 
     @Test
-    void shouldProcessInvoicePayment() {
+    public void shouldProcessInvoicePayment() {
         Invoice invoice = InvoiceTestDataBuilder.anInvoice().build();
         invoice.changePaymentSettings(PaymentMethod.GATEWAY_BALANCE, null);
         invoiceRepository.saveAndFlush(invoice);
@@ -121,7 +120,7 @@ class InvoiceManagementApplicationServiceIT {
     }
 
     @Test
-    void shouldProcessInvoicePaymentAndCancelInvoice() {
+    public void shouldProcessInvoicePaymentAndCancelInvoice() {
         Invoice invoice = InvoiceTestDataBuilder.anInvoice().build();
         invoice.changePaymentSettings(PaymentMethod.GATEWAY_BALANCE, null);
         invoiceRepository.saveAndFlush(invoice);
@@ -132,6 +131,7 @@ class InvoiceManagementApplicationServiceIT {
                 .method(invoice.getPaymentSettings().getMethod())
                 .status(PaymentStatus.FAILED)
                 .build();
+
         Mockito.when(paymentGatewayService.capture(Mockito.any(PaymentRequest.class))).thenReturn(payment);
 
         applicationService.processPayment(invoice.getId());
