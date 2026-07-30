@@ -10,12 +10,12 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-@Entity
-@Getter
 @Setter(AccessLevel.PRIVATE)
+@Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class CreditCard {
 
     @Id
@@ -35,12 +35,11 @@ public class CreditCard {
                                       Integer expMonth,
                                       Integer expYear,
                                       String gatewayCreditCardCode) {
-
         Objects.requireNonNull(customerId);
         Objects.requireNonNull(expMonth);
         Objects.requireNonNull(expYear);
 
-        if(StringUtils.isAnyBlank(lastNumbers, brand, gatewayCreditCardCode)) {
+        if (StringUtils.isAnyBlank(lastNumbers, brand, gatewayCreditCardCode)) {
             throw new IllegalArgumentException();
         }
 
@@ -57,11 +56,9 @@ public class CreditCard {
     }
 
     public void setGatewayCode(String gatewayCode) {
-        if(StringUtils.isBlank(gatewayCode)) {
+        if (StringUtils.isBlank(gatewayCode)) {
             throw new IllegalArgumentException();
         }
-
         this.gatewayCode = gatewayCode;
     }
-
 }

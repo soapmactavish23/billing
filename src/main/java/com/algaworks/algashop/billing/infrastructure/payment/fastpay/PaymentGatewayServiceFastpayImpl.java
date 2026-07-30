@@ -10,17 +10,19 @@ import com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentGatewa
 import com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentRequest;
 import com.algaworks.algashop.billing.infrastructure.payment.AlgaShopPaymentProperties;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @ConditionalOnProperty(name = "algashop.integrations.payment.provider", havingValue = "FASTPAY")
+@RequiredArgsConstructor
+@Slf4j
 public class PaymentGatewayServiceFastpayImpl implements PaymentGatewayService {
 
-    private final FastpayPaymentAPIClient fastpayPaymentAPIClient;
+    private final ResilientFastpayPaymentAPIClient fastpayPaymentAPIClient;
     private final CreditCardRepository creditCardRepository;
 
     private final AlgaShopPaymentProperties algaShopPaymentProperties;
@@ -29,6 +31,7 @@ public class PaymentGatewayServiceFastpayImpl implements PaymentGatewayService {
     public Payment capture(PaymentRequest request) {
         FastpayPaymentInput input = convertToInput(request);
         FastpayPaymentModel response = fastpayPaymentAPIClient.capture(input);
+
         return convertToPayment(response);
     }
 
@@ -57,7 +60,7 @@ public class PaymentGatewayServiceFastpayImpl implements PaymentGatewayService {
             case CREDIT_CARD -> {
                 builder.method(FastpayPaymentMethod.CREDIT.name());
                 CreditCard creditCard = creditCardRepository.findById(request.getCreditCardId())
-                        .orElseThrow(CreditCardNotFoundException::new);
+                        .orElseThrow(() -> new CreditCardNotFoundException());
                 builder.creditCardId(creditCard.getGatewayCode());
             }
             case GATEWAY_BALANCE -> builder.method(FastpayPaymentMethod.GATEWAY_BALANCE.name());
@@ -80,7 +83,6 @@ public class PaymentGatewayServiceFastpayImpl implements PaymentGatewayService {
         }
 
         FastpayPaymentStatus fastpayPaymentStatus;
-
         try {
             fastpayPaymentStatus = FastpayPaymentStatus.valueOf(response.getStatus());
         } catch (Exception e) {

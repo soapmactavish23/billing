@@ -8,7 +8,6 @@ import java.util.UUID;
 @Data
 public class TokenizedCreditCardInput {
     private UUID customerId;
-
     @NotBlank
     private String tokenizedCard;
 }

@@ -1,4 +1,4 @@
-package com.algaworks.algashop.billing.infrastructure.persistence;
+package com.algaworks.algashop.billing.infrastructure.persistence.creditcard;
 
 import com.algaworks.algashop.billing.application.creditcard.query.CreditCardOutput;
 import com.algaworks.algashop.billing.application.creditcard.query.CreditCardQueryService;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CredtiCardQueryServiceImpl implements CreditCardQueryService {
+public class CreditCardQueryServiceImpl implements CreditCardQueryService {
 
     private final CreditCardRepository creditCardRepository;
     private final Mapper mapper;
@@ -23,14 +23,14 @@ public class CredtiCardQueryServiceImpl implements CreditCardQueryService {
     @Override
     public CreditCardOutput findOne(UUID customerId, UUID creditCardId) {
         return creditCardRepository.findByCustomerIdAndId(customerId, creditCardId)
-                .map(c -> mapper.convert(c, CreditCardOutput.class))
-                .orElseThrow(CreditCardNotFoundException::new);
+                .map(c-> mapper.convert(c, CreditCardOutput.class))
+                .orElseThrow(()-> new CreditCardNotFoundException());
     }
 
     @Override
     public List<CreditCardOutput> findByCustomer(UUID customerId) {
         return creditCardRepository.findAllByCustomerId(customerId)
-                .stream().map(c -> mapper.convert(c, CreditCardOutput.class))
+                .stream().map(c-> mapper.convert(c, CreditCardOutput.class))
                 .toList();
     }
 }

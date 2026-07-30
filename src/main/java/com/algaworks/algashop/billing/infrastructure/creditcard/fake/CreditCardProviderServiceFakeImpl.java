@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Service
 @ConditionalOnProperty(name = "algashop.integrations.payment.provider", havingValue = "FAKE")
-public class CredtiCardProviderServiceFakeImpl implements CreditCardProviderService {
+public class CreditCardProviderServiceFakeImpl implements CreditCardProviderService {
 
     @Override
     public LimitedCreditCard register(UUID customerId, String tokenizedCard) {
@@ -19,7 +19,7 @@ public class CredtiCardProviderServiceFakeImpl implements CreditCardProviderServ
     }
 
     @Override
-    public Optional<LimitedCreditCard> findById(String providerCreditCardCode) {
+    public Optional<LimitedCreditCard> findById(String gatewayCode) {
         return Optional.of(fakeCard());
     }
 
@@ -28,7 +28,7 @@ public class CredtiCardProviderServiceFakeImpl implements CreditCardProviderServ
 
     }
 
-    private static LimitedCreditCard fakeCard() {
+    private LimitedCreditCard fakeCard() {
         return LimitedCreditCard.builder()
                 .brand("Visa")
                 .expMonth(1)

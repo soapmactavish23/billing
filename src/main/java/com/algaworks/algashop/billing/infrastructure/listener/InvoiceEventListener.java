@@ -15,12 +15,12 @@ public class InvoiceEventListener {
     }
 
     @EventListener
-    public void listen(InvoicePaidEvent event) {
+    public void listen(InvoiceCanceledEvent event) {
 
     }
 
     @EventListener
-    public void listen(InvoiceCanceledEvent event) {
+    public void listen(InvoicePaidEvent event) {
 
     }
 

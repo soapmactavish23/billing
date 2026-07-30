@@ -11,8 +11,8 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class InvoiceOutput {
     private UUID id;
     private String orderId;
@@ -23,6 +23,6 @@ public class InvoiceOutput {
     private OffsetDateTime expiresAt;
     private BigDecimal totalAmount;
     private InvoiceStatus status;
-    private PayerData data;
+    private PayerData payer;
     private PaymentSettingsOutput paymentSettings;
 }

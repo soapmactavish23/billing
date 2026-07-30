@@ -21,4 +21,5 @@ public interface FastpayPaymentAPIClient {
 
     @PutExchange("/{paymentId}/cancel")
     void cancel(@PathVariable String paymentId);
+
 }

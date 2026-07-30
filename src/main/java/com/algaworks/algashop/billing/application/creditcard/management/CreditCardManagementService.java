@@ -16,8 +16,7 @@ public class CreditCardManagementService {
 
     @Transactional
     public UUID register(TokenizedCreditCardInput input) {
-        LimitedCreditCard limitedCreditCard = creditCardProviderService.register(
-                input.getCustomerId(), input.getTokenizedCard());
+        LimitedCreditCard limitedCreditCard = creditCardProviderService.register(input.getCustomerId(), input.getTokenizedCard());
 
         CreditCard creditCard = CreditCard.brandNew(
                 input.getCustomerId(),
@@ -36,8 +35,9 @@ public class CreditCardManagementService {
     @Transactional
     public void delete(UUID customerId, UUID creditCardId) {
         CreditCard creditCard = creditCardRepository.findByCustomerIdAndId(customerId, creditCardId)
-                .orElseThrow(CreditCardNotFoundException::new);
+                .orElseThrow(() -> new CreditCardNotFoundException());
         creditCardRepository.delete(creditCard);
         creditCardProviderService.delete(creditCard.getGatewayCode());
     }
+
 }

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class FastpayWebhookHandler {
 
     private final InvoiceManagementApplicationService invoiceManagementApplicationService;

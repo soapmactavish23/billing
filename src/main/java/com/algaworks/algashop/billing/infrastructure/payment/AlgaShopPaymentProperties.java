@@ -8,12 +8,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-@Data
 @Component
-@Validated
 @ConfigurationProperties("algashop.integrations.payment")
+@Data
+@Validated
 public class AlgaShopPaymentProperties {
-
     @NotNull
     private AlgaShopPaymentProvider provider;
 
@@ -21,15 +20,14 @@ public class AlgaShopPaymentProperties {
     @Valid
     private FastpayProperties fastpay;
 
-    private enum AlgaShopPaymentProvider {
+    public enum AlgaShopPaymentProvider {
         FAKE,
         FASTPAY
     }
 
-    @Data
     @Validated
+    @Data
     public static class FastpayProperties {
-
         @NotBlank
         private String hostname;
 
@@ -38,7 +36,5 @@ public class AlgaShopPaymentProperties {
 
         @NotBlank
         private String webhookUrl;
-
     }
-
 }

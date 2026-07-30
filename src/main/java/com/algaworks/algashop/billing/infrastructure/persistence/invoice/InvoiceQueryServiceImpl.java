@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class InvoiceQueryServiceImpl implements InvoiceQueryService {
 
     private final InvoiceRepository invoiceRepository;
@@ -20,7 +20,7 @@ public class InvoiceQueryServiceImpl implements InvoiceQueryService {
 
     @Override
     public InvoiceOutput findByOrderId(String orderId) {
-        Invoice invoice = invoiceRepository.findByOrderId(orderId).orElseThrow(InvoiceNotFoundException::new);
+        Invoice invoice = invoiceRepository.findByOrderId(orderId).orElseThrow(() -> new InvoiceNotFoundException());
         return mapper.convert(invoice, InvoiceOutput.class);
     }
 }
