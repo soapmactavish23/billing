@@ -14,21 +14,21 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Builder
 public class PaymentRequest {
-
     private PaymentMethod method;
     private BigDecimal amount;
     private UUID invoiceId;
     private UUID creditCardId;
     private Payer payer;
 
-    public PaymentRequest(PaymentMethod method, BigDecimal amount, UUID invoiceId, UUID creditCardId, Payer payer) {
-
+    public PaymentRequest(PaymentMethod method,
+                          BigDecimal amount, UUID invoiceId,
+                          UUID creditCardId, Payer payer) {
         Objects.requireNonNull(method);
         Objects.requireNonNull(amount);
         Objects.requireNonNull(invoiceId);
         Objects.requireNonNull(payer);
 
-        if(method.equals(PaymentMethod.CREDIT_CARD)) {
+        if (method.equals(PaymentMethod.CREDIT_CARD)) {
             Objects.requireNonNull(creditCardId);
         }
 

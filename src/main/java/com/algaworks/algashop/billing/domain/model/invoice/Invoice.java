@@ -4,20 +4,20 @@ import com.algaworks.algashop.billing.domain.model.AbstractAuditableAggregateRoo
 import com.algaworks.algashop.billing.domain.model.DomainException;
 import com.algaworks.algashop.billing.domain.model.IdGenerator;
 import com.algaworks.algashop.billing.domain.model.invoice.payment.PaymentStatus;
-import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-@Entity
 @Setter(AccessLevel.PRIVATE)
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Invoice extends AbstractAuditableAggregateRoot<Invoice> {
 
     @Id
@@ -36,11 +36,12 @@ public class Invoice extends AbstractAuditableAggregateRoot<Invoice> {
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private PaymentSettings paymentSettings;
 
     @ElementCollection
-    @CollectionTable(name = "invoice_line_item", joinColumns = @JoinColumn(name = "invoice_id"))
+    @CollectionTable(name = "invoice_line_item",
+            joinColumns = @JoinColumn(name = "invoice_id"))
     private Set<LineItem> items = new HashSet<>();
 
     @Embedded
@@ -82,10 +83,8 @@ public class Invoice extends AbstractAuditableAggregateRoot<Invoice> {
                 payer,
                 null
         );
-
         invoice.registerEvent(new InvoiceIssuedEvent(invoice.getId(),
                 invoice.getCustomerId(), invoice.getOrderId(), invoice.getIssuedAt()));
-
         return invoice;
     }
 
@@ -124,8 +123,7 @@ public class Invoice extends AbstractAuditableAggregateRoot<Invoice> {
         setCanceledAt(OffsetDateTime.now());
         setStatus(InvoiceStatus.CANCELED);
         setExpiresAt(null);
-        registerEvent(new InvoiceCanceledEvent(this.getId(), this.getCustomerId(), this.getOrderId(),
-                this.getCanceledAt()));
+        registerEvent(new InvoiceCanceledEvent(this.getId(), this.getCustomerId(), this.getOrderId(), this.getCanceledAt()));
     }
 
     public void assignPaymentGatewayCode(String code) {

@@ -19,12 +19,12 @@ public class Address {
     private String zipCode;
 
     @Builder
-    public Address(String street, String number, String complement, String neighborhood, String city, String state,
-                   String zipCode) {
+    public Address(String street, String number, String complement,
+                   String neighborhood, String city, String state, String zipCode) {
         FieldValidations.requiresNonBlank(street);
-        FieldValidations.requiresNonBlank(number);
         FieldValidations.requiresNonBlank(neighborhood);
         FieldValidations.requiresNonBlank(city);
+        FieldValidations.requiresNonBlank(number);
         FieldValidations.requiresNonBlank(state);
         FieldValidations.requiresNonBlank(zipCode);
         this.street = street;

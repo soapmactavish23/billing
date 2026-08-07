@@ -6,8 +6,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface InvoiceRepository extends JpaRepository<Invoice, UUID> {
+    boolean existsByOrderId(String orderId);
 
-    Boolean existsByOrderId(String orderId);
     Optional<Invoice> findByOrderId(String orderId);
+    Optional<Invoice> findByOrderIdAndCustomerId(String orderId, UUID customerId);
 
 }

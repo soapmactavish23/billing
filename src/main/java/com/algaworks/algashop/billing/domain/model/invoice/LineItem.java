@@ -23,11 +23,11 @@ public class LineItem {
         Objects.requireNonNull(number);
         Objects.requireNonNull(amount);
 
-        if(amount.compareTo(BigDecimal.ZERO) <= 0) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException();
         }
 
-        if(number <= 0) {
+        if (number <= 0) {
             throw new IllegalArgumentException();
         }
 

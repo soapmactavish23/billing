@@ -2,19 +2,19 @@ package com.algaworks.algashop.billing.domain.model.invoice;
 
 import com.algaworks.algashop.billing.domain.model.DomainException;
 import com.algaworks.algashop.billing.domain.model.IdGenerator;
-import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 import java.util.UUID;
 
-@Entity
-@Getter
 @Setter(AccessLevel.PRIVATE)
+@Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class PaymentSettings {
 
     @Id
@@ -33,7 +33,7 @@ public class PaymentSettings {
 
     static PaymentSettings brandNew(PaymentMethod method, UUID creditCardId) {
         Objects.requireNonNull(method);
-        if(method.equals(PaymentMethod.CREDIT_CARD)) {
+        if (method.equals(PaymentMethod.CREDIT_CARD)) {
             Objects.requireNonNull(creditCardId);
         }
         return new PaymentSettings(
@@ -46,11 +46,10 @@ public class PaymentSettings {
     }
 
     void assignGatewayCode(String gatewayCode) {
-        if(StringUtils.isBlank(gatewayCode)) {
+        if (StringUtils.isBlank(gatewayCode)) {
             throw new IllegalArgumentException();
         }
-
-        if(this.getGatewayCode() != null) {
+        if (this.getGatewayCode() != null) {
             throw new DomainException("Gateway code already assigned");
         }
         setGatewayCode(gatewayCode);
