@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentSettingsInput {
-    @NotNull
-    private PaymentMethod method;
-    private UUID creditCardId;
+	@NotNull
+	private PaymentMethod method;
+	private UUID creditCardId;
 }

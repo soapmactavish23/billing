@@ -35,3 +35,4 @@ public class SecurityAnnotations {
     public @interface CanWriteMyCreditCards {}
 
 }
+

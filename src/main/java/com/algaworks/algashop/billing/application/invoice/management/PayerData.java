@@ -13,15 +13,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PayerData {
-    @NotBlank
-    private String fullName;
-    @NotBlank
-    private String document;
-    @NotBlank
-    private String email;
-    @NotBlank
-    private String phone;
-    @NotNull
-    @Valid
-    private AddressData address;
+	@NotBlank
+	private String fullName;
+	@NotBlank
+	private String document;
+	@NotBlank
+	private String email;
+	@NotBlank
+	private String phone;
+	@NotNull
+	@Valid
+	private AddressData address;
 }

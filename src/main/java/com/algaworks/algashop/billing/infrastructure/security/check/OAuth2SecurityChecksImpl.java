@@ -70,3 +70,4 @@ public class OAuth2SecurityChecksImpl implements SecurityChecks {
         return authentication;
     }
 }
+
