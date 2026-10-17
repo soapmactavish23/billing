@@ -23,10 +23,10 @@ import org.springframework.stereotype.Component;
         topics = "#{algaShopMessagingKafkaProperties.orderEventTopicName}")
 public class KafkaOrderIntegrationEventListener {
 
-    private final InvoiceManagementApplicationService invoiceManagementApplicationService;
-    private final GenerateInvoiceInputAssembler generateInvoiceInputAssembler;
+	private final InvoiceManagementApplicationService invoiceManagementApplicationService;
+	private final GenerateInvoiceInputAssembler generateInvoiceInputAssembler;
 
-    @KafkaHandler(isDefault = true)
+	@KafkaHandler(isDefault = true)
     public void handle(
             @Payload Object event,
             @Header(value = KafkaHeaders.RECEIVED_KEY, required = false) String messageKey,
@@ -34,21 +34,21 @@ public class KafkaOrderIntegrationEventListener {
         log.info("Event ignored: type={} key={} offset={}",
                 event.getClass().getSimpleName(), messageKey, offset);
     }
-
+    
     @KafkaHandler
     public void handle(
             @Payload @Valid OrderPlacedIntegrationEvent event,
-            @Header(value = KafkaHeaders.RECEIVED_KEY, required = false)
-            String messageKey,
+            @Header(value = KafkaHeaders.RECEIVED_KEY, required = false) 
+	            String messageKey,
             @Header(value = KafkaHeaders.RECEIVED_PARTITION
-                    , required = false) Integer partition,
+	            , required = false) Integer partition,
             @Header(value = KafkaHeaders.OFFSET, required = false) Long offset) {
         logReceived(event, messageKey, partition, offset);
 
-        GenerateInvoiceInput input = generateInvoiceInputAssembler.toGenerateInvoiceInput(event);
-        invoiceManagementApplicationService.generate(input);
+	    GenerateInvoiceInput input = generateInvoiceInputAssembler.toGenerateInvoiceInput(event);
+		invoiceManagementApplicationService.generate(input);
     }
-
+    
     private void logReceived(Object event, String messageKey, Integer partition, Long offset) {
         log.info("Received {} | key={} | partition={} | offset={} | thread={}",
                 event.getClass().getSimpleName(), messageKey, partition, offset,

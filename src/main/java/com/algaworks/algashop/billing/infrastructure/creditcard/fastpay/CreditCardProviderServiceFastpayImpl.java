@@ -11,10 +11,10 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.util.Optional;
 import java.util.UUID;
 
-@Slf4j
 @Service
 @ConditionalOnProperty(name = "algashop.integrations.payment.provider", havingValue = "FASTPAY")
 @RequiredArgsConstructor
+@Slf4j
 public class CreditCardProviderServiceFastpayImpl implements CreditCardProviderService {
 
     private final FastpayCreditCardAPIClient fastpayCreditCardAPIClient;
