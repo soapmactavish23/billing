@@ -1,6 +1,6 @@
 package com.algaworks.algashop.billing.application.stock.event;
 
-import com.algaworks.algashop.billing.application.IntegrationEvent;
+import com.algaworks.algashop.billing.application.OutboundIntegrationEvent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StockReservationRejectedIntegrationEvent implements IntegrationEvent {
+public class StockReservationRejectedIntegrationEvent implements OutboundIntegrationEvent {
 
     @NotNull
     private UUID reservationId;
