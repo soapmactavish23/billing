@@ -60,10 +60,12 @@ public class KafkaInvoiceIntegrationReplyPublisher implements InvoiceIntegration
         }
 
         RecordMetadata metadata = result.getRecordMetadata();
+
         log.info("Published {} to {}-{} at offset {}",
                 reply.getClass().getSimpleName(),
                 metadata.topic(),
                 metadata.partition(),
                 metadata.offset());
     }
+
 }

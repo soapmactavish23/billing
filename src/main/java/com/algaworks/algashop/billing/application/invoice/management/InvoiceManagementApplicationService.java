@@ -126,7 +126,8 @@ public class InvoiceManagementApplicationService {
                 .build();
     }
 
-    public void refundByOrderId(@NotBlank String orderId) {
+    @Transactional
+	public void refundByOrderId(@NotBlank String orderId) {
         Invoice invoice = invoiceRepository.findByOrderId(orderId).orElseThrow(InvoiceNotFoundException::new);
 
         paymentGatewayService.refund(invoice.getPaymentSettings().getGatewayCode());

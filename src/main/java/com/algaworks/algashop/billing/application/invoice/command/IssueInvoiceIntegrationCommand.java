@@ -1,10 +1,7 @@
 package com.algaworks.algashop.billing.application.invoice.command;
 
 import com.algaworks.algashop.billing.application.InboundIntegrationCommand;
-import com.algaworks.algashop.billing.application.order.snapshot.BillingSnapshot;
-import com.algaworks.algashop.billing.application.order.snapshot.OrderItemSnapshot;
-import com.algaworks.algashop.billing.application.order.snapshot.PaymentSnapshot;
-import com.algaworks.algashop.billing.application.order.snapshot.ShippingSnapshot;
+import com.algaworks.algashop.billing.application.order.snapshot.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +15,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 

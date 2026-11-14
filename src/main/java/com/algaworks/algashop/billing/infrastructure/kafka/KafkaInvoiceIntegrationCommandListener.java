@@ -35,6 +35,7 @@ public class KafkaInvoiceIntegrationCommandListener {
 
     private final InvoiceManagementApplicationService invoiceManagementApplicationService;
     private final InvoiceQueryService invoiceQueryService;
+
     private final GenerateInvoiceInputAssembler generateInvoiceInputAssembler;
 
     private final PendingReplies pendingReplies;

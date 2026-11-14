@@ -47,8 +47,7 @@ public class InvoiceEventListener {
                             .canceledAt(event.getCanceledAt())
                             .build()
             );
-
-            pendingReplies.remove(pending.getInvoiceId());
+            pendingReplies.remove(event.getInvoiceId());
         });
     }
 
@@ -66,8 +65,7 @@ public class InvoiceEventListener {
                             .paidAt(event.getPaidAt())
                             .build()
             );
-
-            pendingReplies.remove(pending.getInvoiceId());
+            pendingReplies.remove(event.getInvoiceId());
         });
     }
 

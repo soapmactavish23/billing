@@ -12,21 +12,20 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PendingReplies {
 
-    private final PedingReplyRepository repository;
+	private final PendingReplyRepository repository;
 
-    @Transactional
-    public void register(UUID invoiceId, String orderId, String correlationId, String replyTopic) {
-        repository.save(new PendingReplyEntity(invoiceId, orderId, correlationId, replyTopic));
-    }
+	@Transactional
+	public void register(UUID invoiceId, String orderId, String correlationId, String replyTopic) {
+		repository.save(new PendingReplyEntity(invoiceId, orderId, correlationId, replyTopic));
+	}
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public Optional<PendingReplyEntity> find(UUID invoiceId) {
-        return repository.findById(invoiceId);
-    }
+	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+	public Optional<PendingReplyEntity> find(UUID invoiceId) {
+		return repository.findById(invoiceId);
+	}
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void remove(UUID invoiceId) {
-        repository.deleteById(invoiceId);
-    }
-
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void remove(UUID invoiceId) {
+		repository.deleteById(invoiceId);
+	}
 }
