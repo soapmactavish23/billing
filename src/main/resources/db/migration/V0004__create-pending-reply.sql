@@ -1,4 +1,5 @@
-create table public.pending_reply (
+create table public.pending_reply
+(
     invoice_id     uuid                     not null,
     order_id       varchar(255)             not null,
     correlation_id varchar(255)             not null,
